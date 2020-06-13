@@ -1,4 +1,4 @@
-﻿global brr := ["clashing ", "of ", "the swords ", "a nasheed ", "of ", "the defiant "]
+global brr := ["clashing ", "of ", "the swords ", "a nasheed ", "of ", "the defiant "]
 global resting := 500
 global infresting := 5
 global visit := [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -27,10 +27,7 @@ informspec(){
 }
 
 Perm(){
-	if(mod==s+1){
-		if(Round(Mod(counter,infresting))==0){
-			inform()
-		}
+	if(mod==s+1){		
 		counter := counter + 1
 		Loop, %s%
 		{
@@ -55,8 +52,41 @@ Perm(){
 	}
 }
 
+Perm_Debug(){
+	if(mod==s+1){
+		if(Round(Mod(counter,infresting))==0){
+			inform()
+		}
+		counter := counter + 1
+		Loop, %s%
+		{
+			var := perm[A_Index]
+			Send, %var%
+		}
+		Send, {Enter}
+		Sleep, %resting%
+	}
+	Loop, %s%
+	{
+		if(visit[A_Index]==0)
+		{
+			visit[A_Index]:=1
+			perm.Insert(mod, brr[A_Index])
+			mod := mod+1
+			Perm_Debug()
+			visit[A_Index]:=0
+			perm.remove(mod)
+			mod := mod-1
+		}
+	}
+}
+
 ^j::
 Perm()
+return
+
+^d::
+Perm_Debug()
 return
 
 
